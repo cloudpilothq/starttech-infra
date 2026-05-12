@@ -1,0 +1,22 @@
+[
+  {
+    "AlarmName": "ALB-5XX-Errors",
+    "MetricName": "HTTPCode_Target_5XX_Count",
+    "Namespace": "AWS/ApplicationELB",
+    "Statistic": "Sum",
+    "Period": 60,
+    "EvaluationPeriods": 2,
+    "Threshold": 10,
+    "ComparisonOperator": "GreaterThanThreshold"
+  },
+  {
+    "AlarmName": "Unhealthy-Hosts",
+    "MetricName": "UnHealthyHostCount",
+    "Namespace": "AWS/ApplicationELB",
+    "Statistic": "Average",
+    "Period": 60,
+    "EvaluationPeriods": 2,
+    "Threshold": 1,
+    "ComparisonOperator": "GreaterThanThreshold"
+  }
+]

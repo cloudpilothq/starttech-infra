@@ -1,0 +1,13 @@
+# Find the most frequent errors in the application logs
+fields @timestamp, @message
+| filter @message like /error|Exception/
+| sort @timestamp desc
+| limit 20
+
+# Find requests that took longer than 500ms
+fields @timestamp, @message
+| filter @message like /response_time/
+| parse @message "* response_time: *" as req, rt
+| filter rt > 500
+| sort @timestamp desc
+| limit 20
