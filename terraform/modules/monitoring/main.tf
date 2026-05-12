@@ -13,7 +13,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx_errors" {
   statistic           = "Sum"
   threshold           = "10"
   alarm_description   = "This metric monitors ALB 5XX errors"
-  
+
   dimensions = {
     LoadBalancer = var.alb_arn_suffix
   }
