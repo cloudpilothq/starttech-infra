@@ -53,7 +53,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           ]
           period = 300
           stat   = "Sum"
-          region = "us-east-1"
+          region = var.aws_region
           title  = "ALB 5XX Errors"
         }
       },
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           ]
           period = 60
           stat   = "Average"
-          region = "us-east-1"
+          region = var.aws_region
           title  = "Unhealthy Hosts"
         }
       }

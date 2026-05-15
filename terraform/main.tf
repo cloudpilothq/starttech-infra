@@ -32,6 +32,7 @@ module "compute" {
   desired_capacity   = var.desired_capacity
   environment        = var.environment
   project_name       = var.project_name
+  redis_endpoint     = module.storage.redis_endpoint
 }
 
 module "storage" {
@@ -48,4 +49,5 @@ module "monitoring" {
   project_name   = var.project_name
   alb_arn_suffix = module.compute.alb_arn_suffix
   tg_arn_suffix  = module.compute.tg_arn_suffix
+  aws_region     = var.aws_region
 }

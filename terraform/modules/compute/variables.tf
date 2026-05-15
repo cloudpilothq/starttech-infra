@@ -7,3 +7,4 @@ variable "max_size" { type = number }
 variable "desired_capacity" { type = number }
 variable "environment" {}
 variable "project_name" {}
+variable "redis_endpoint" {}

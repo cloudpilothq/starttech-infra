@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "The AWS region to deploy the infrastructure to"
   type        = string
-  default     = "us-east-1"
+  default     = "eu-west-2"
 }
 
 variable "project_name" {
@@ -37,13 +37,13 @@ variable "private_subnet_cidrs" {
 variable "availability_zones" {
   description = "The availability zones to use"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"]
+  default     = ["eu-west-2a", "eu-west-2b"]
 }
 
 variable "instance_type" {
   description = "The EC2 instance type for the backend application"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 variable "min_size" {

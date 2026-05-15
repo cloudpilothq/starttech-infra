@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 data "aws_ami" "amazon_linux_2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -82,6 +85,11 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "ecr_readonly" {
+  role       = aws_iam_role.app_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
 resource "aws_iam_instance_profile" "app_profile" {
   name = "${var.project_name}-app-profile-${var.environment}"
   role = aws_iam_role.app_role.name
@@ -105,7 +113,17 @@ resource "aws_launch_template" "app" {
               systemctl start docker
               systemctl enable docker
               usermod -aG docker ec2-user
-              # ECR login and docker run commands will be injected by user data or CI/CD
+
+              # Authenticate to ECR
+              aws ecr get-login-password --region ${data.aws_region.current.name} | docker login --username AWS --password-stdin ${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com
+
+              # Pull and run the latest image
+              # The image tag 'latest' should be pushed by CI/CD
+              docker pull ${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/starttech-backend:latest
+              
+              # Run container, pass REDIS_URL
+              # Assuming the application listens on port 8080 as per the security group
+              docker run -d -p 8080:8080 -e REDIS_URL=${var.redis_endpoint}:6379 -e PORT=8080 ${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/starttech-backend:latest
               EOF
   )
 
